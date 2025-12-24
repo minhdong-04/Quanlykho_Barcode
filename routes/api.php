@@ -2,11 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\SupplierController;
+use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\Barcode\BarcodeController;
 use App\Http\Controllers\Api\Stock\StockInController;
 use App\Http\Controllers\Api\Stock\StockOutController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Services\Inventory\InventoryService;
+use App\Http\Controllers\Api\V1\AlertsController;
 
 Route::prefix('api')->group(function () {
     Route::prefix('v1')->group(function () {
@@ -22,6 +24,7 @@ Route::prefix('api')->group(function () {
     // Protected resource endpoints (require token)
     Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('suppliers', SupplierController::class);
+        Route::apiResource('products', ProductController::class);
 
         Route::post('stock/in', [StockInController::class, 'store']);
         Route::post('stock/out', [StockOutController::class, 'store']);
@@ -30,6 +33,7 @@ Route::prefix('api')->group(function () {
             $service = new InventoryService();
             return $service->checkLowStock();
         });
+        Route::get('alerts/low-stock', [AlertsController::class, 'lowStock']);
     });
     });
 });
