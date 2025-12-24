@@ -22,6 +22,16 @@ trait CreatesApplication
 
         $app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
+        // Sau khi bootstrap xong, override cấu hình Sanctum cho môi trường test
+        $app['config']->set('sanctum.guard', env('SANCTUM_GUARD', 'api'));
+
+        // Đảm bảo có binding `session.store` trong môi trường test để tránh lỗi
+        if (! $app->bound('session.store')) {
+            $handler = new \Illuminate\Session\ArraySessionHandler(120);
+            $store = new \Illuminate\Session\Store('testing', $handler);
+            $app->instance('session.store', $store);
+        }
+
         return $app;
     }
 }

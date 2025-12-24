@@ -2,35 +2,12 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
-use App\Services\Inventory\InventoryService;
-use Illuminate\Http\Request;
-
-class AlertsController extends Controller
+/**
+ * Backwards-compatible wrapper: keep `AlertsController` delegating
+ * to the new `AlertController` to avoid breaking routes that reference
+ * the old controller name.
+ */
+class AlertsController extends AlertController
 {
-    public function lowStock(Request $request)
-    {
-        $service = new InventoryService();
-        return response()->json($service->checkLowStock());
-    }
-
-    public function index()
-    {
-        return \App\Models\LowStockAlert::query()->orderBy('created_at', 'desc')->get();
-    }
-
-    public function acknowledge($id)
-    {
-        $alert = \App\Models\LowStockAlert::findOrFail($id);
-        $alert->notified = true;
-        $alert->save();
-        return response()->json(['message' => 'Alert acknowledged']);
-    }
-
-    public function clear($id)
-    {
-        $alert = \App\Models\LowStockAlert::findOrFail($id);
-        $alert->delete();
-        return response()->json(['message' => 'Alert cleared']);
-    }
+    // empty - uses AlertController implementations
 }

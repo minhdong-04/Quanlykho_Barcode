@@ -6,34 +6,40 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
-	public function register(Request $request)
-	{
-		$data = $this->validate($request, [
-			'name' => 'required|string|max:255',
-			'email' => 'required|email|unique:users,email',
-			'password' => 'required|string|min:6|confirmed',
-		]);
+ 	public function register(Request $request)
+ 	{
+ 		$data = $this->validate($request, [
+ 			'name' => 'required|string|max:255',
+ 			'email' => 'required|email|unique:users,email',
+ 			'password' => 'required|string|min:6|confirmed',
+ 		]);
 
-		$user = User::create([
-			'name' => $data['name'],
-			'email' => $data['email'],
-			'password' => Hash::make($data['password']),
-		]);
+		try {
+			$user = User::create([
+				'name' => $data['name'],
+				'email' => $data['email'],
+				'password' => Hash::make($data['password']),
+			]);
 
-		$token = $user->createToken('api-token')->plainTextToken;
+			$token = $user->createToken('api-token')->plainTextToken;
 
-		return response()->json(['user' => $user, 'token' => $token], 201);
+			return response()->json(['user' => $user, 'token' => $token], 201);
+		} catch (\Throwable $e) {
+			Log::error('Auth register error: ' . $e->getMessage());
+			return response()->json(['message' => 'Registration failed', 'error' => $e->getMessage()], 500);
+		}
 	}
 
-	public function login(Request $request)
-	{
-		$data = $this->validate($request, [
-			'email' => 'required|email',
-			'password' => 'required|string',
-		]);
+ 	public function login(Request $request)
+ 	{
+ 		$data = $this->validate($request, [
+ 			'email' => 'required|email',
+ 			'password' => 'required|string',
+ 		]);
 
 		$user = User::where('email', $data['email'])->first();
 
@@ -55,9 +61,9 @@ class AuthController extends Controller
 		return response()->json(['message' => 'Logged out']);
 	}
 
-	public function me(Request $request)
-	{
-		return $request->user();
-	}
+ 	public function me(Request $request)
+ 	{
+ 		return $request->user();
+ 	}
 }
 

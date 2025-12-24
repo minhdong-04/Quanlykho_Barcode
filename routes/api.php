@@ -3,12 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\V1\ProductController;
-use App\Http\Controllers\Api\Barcode\BarcodeController;
-use App\Http\Controllers\Api\Stock\StockInController;
-use App\Http\Controllers\Api\Stock\StockOutController;
+use App\Http\Controllers\Api\V1\BarcodeController;
+use App\Http\Controllers\Api\V1\StockInController;
+use App\Http\Controllers\Api\V1\StockOutController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Services\Inventory\InventoryService;
-use App\Http\Controllers\Api\V1\AlertsController;
+use App\Http\Controllers\Api\V1\AlertController;
 
 Route::prefix('api')->group(function () {
     Route::prefix('v1')->group(function () {
@@ -33,7 +33,7 @@ Route::prefix('api')->group(function () {
             $service = new InventoryService();
             return $service->checkLowStock();
         });
-        Route::get('alerts/low-stock', [AlertsController::class, 'lowStock']);
+        Route::get('alerts/low-stock', [AlertController::class, 'lowStock']);
     });
     });
 });

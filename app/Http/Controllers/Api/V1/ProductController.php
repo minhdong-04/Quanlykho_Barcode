@@ -23,7 +23,14 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         logger()->info('Product store payload', $request->all());
-        $data = $request->only(['name','sku','barcode','description','reorder_level']);
+
+        $data = $request->all();
+        $rules = (new StoreProductRequest())->rules();
+        $validator = \Illuminate\Support\Facades\Validator::make($data, $rules);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        $data = $validator->validated();
         logger()->info('Product store extracted', $data);
         try {
             $product = Product::create($data);
