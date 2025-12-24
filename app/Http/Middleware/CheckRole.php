@@ -8,9 +8,11 @@ use Illuminate\Http\Request;
 class CheckRole
 {
     /**
-     * Handle an incoming request.
-     * Usage: ->middleware('role:admin') or ->middleware('role:admin,staff')
-     */
+ * Xử lý request đi vào và kiểm tra quyền truy cập theo vai trò.
+ * Cách sử dụng:
+ *  - ->middleware('role:admin')        : chỉ cho phép admin
+ *  - ->middleware('role:admin,staff') : cho phép admin và staff
+ */
     public function handle(Request $request, Closure $next, ...$roles)
     {
         $user = $request->user();

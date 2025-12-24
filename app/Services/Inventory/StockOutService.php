@@ -3,7 +3,7 @@
 namespace App\Services\Inventory;
 
 use App\Models\Inventory;
-use App\Models\StockMovement;
+use App\Models\StockLog;
 use App\Models\LowStockAlert;
 use App\Jobs\LowStockAlertJob;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +14,7 @@ class StockOutService
 	 * Remove stock from inventory and record movement.
 	 *
 	 * @throws \RuntimeException when insufficient stock
-	 * @return StockMovement
+	 * @return StockLog
 	 */
 	public function handle(int $productId, int $warehouseId, int $quantity, ?string $notes = null, ?int $userId = null)
 	{
@@ -45,11 +45,12 @@ class StockOutService
 				}
 			}
 
-			$movement = StockMovement::create([
+			$movement = StockLog::create([
 				'product_id' => $productId,
 				'warehouse_id' => $warehouseId,
-				'quantity' => $quantity,
-				'movement_type' => 'out',
+				'quantity_change' => -1 * abs($quantity),
+				'action' => 'out',
+				'reference_id' => null,
 				'notes' => $notes,
 				'user_id' => $userId,
 			]);

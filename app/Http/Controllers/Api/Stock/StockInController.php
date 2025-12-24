@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Stock;
 use App\Http\Controllers\Controller;
 use App\Models\Inventory;
 use App\Models\Product;
-use App\Models\StockMovement;
+use App\Models\StockLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Services\Inventory\StockInService;

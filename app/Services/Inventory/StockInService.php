@@ -3,7 +3,7 @@
 namespace App\Services\Inventory;
 
 use App\Models\Inventory;
-use App\Models\StockMovement;
+use App\Models\StockLog;
 use App\Models\LowStockAlert;
 use App\Jobs\LowStockAlertJob;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +13,7 @@ class StockInService
 	/**
 	 * Add stock to inventory and record movement.
 	 *
-	 * @return StockMovement
+	 * @return StockLog
 	 */
 	public function handle(int $productId, int $warehouseId, int $quantity, ?int $supplierId = null, ?string $notes = null, ?int $userId = null)
 	{
@@ -41,12 +41,12 @@ class StockInService
 				}
 			}
 
-			$movement = StockMovement::create([
+			$movement = StockLog::create([
 				'product_id' => $productId,
 				'warehouse_id' => $warehouseId,
-				'quantity' => $quantity,
-				'movement_type' => 'in',
-				'supplier_id' => $supplierId,
+				'quantity_change' => $quantity,
+				'action' => 'in',
+				'reference_id' => $supplierId,
 				'notes' => $notes,
 				'user_id' => $userId,
 			]);
