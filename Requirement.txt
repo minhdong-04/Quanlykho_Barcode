@@ -1,0 +1,16 @@
+Các phiên bản phần mềm là 
+Client layer
+Web App: Vue 3 + Vite + Quasar (SPA / PWA)
+Mobile App: Consume REST API (có thể là Flutter / React Native / Ionic)
+Scanner:
+Camera: ZXing JS
+Thiết bị vật lý: USB/Bluetooth (HID)
+Backend layer
+Laravel 11 – Web API
+Laravel Sanctum – Token-based Authentication
+MySQL – Primary Database
+Laravel Queue  – Background jobs 
+Architecture style
+Clean Architecture (Application-centric)
+RESTful API chuẩn JSON
+Stateless API, Mobile-first

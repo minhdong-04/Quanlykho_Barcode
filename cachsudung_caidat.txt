@@ -1,0 +1,43 @@
+Nhìn tổng quan
+Backend: wms-backend — ứng dụng Laravel (PHP).
+Frontend: wms-frontend — app JS (Vite).
+Chuẩn bị (Windows / PowerShell)
+Cài PHP (>= dự án yêu cầu), Composer, MySQL (hoặc DB tương thích), Node.js và npm/yarn.
+Nếu dùng Laragon, đặt project trong www (đã đúng).
+
+Backend — cài đặt và chạy
+Vào thư mục backend:cd wms-backend
+
+Sao chép file môi trường và chỉnh DB_* trong .env:copy .env.example .env
+# chỉnh .env bằng editor (DB_DATABASE, DB_USERNAME, DB_PASSWORD)
+
+Cài phụ thuộc PHP:composer install
+
+Tạo app key:php artisan key:generate
+
+Chạy migration + seed (sau khi cấu hình DB):php artisan migrate --seed
+
+Chạy server (hoặc dùng Laragon/Apache):php artisan serve --host=127.0.0.1 --port=8000 or composer run dev vì đã được cấu hình sẵn trong composer.json
+
+Kiểm tra: mở http://127.0.0.1:8000 hoặc endpoint http://127.0.0.1:8000/api/...
+
+Frontend — cài đặt và chạy
+Vào thư mục frontend:
+cd ..\wms-frontend
+npm install
+npm run dev
+
+Mặc định Vite sẽ chạy dev server; mở địa chỉ hiển thị trong terminal (vd. http://localhost:5173).
+Chạy test (nếu cần)
+
+Backend PHPUnit:
+cd wms-backend
+./vendor/bin/phpunit
+
+Frontend: nếu có script test trong package.json:
+cd wms-frontend
+npm test
+
+Lưu ý cấu hình
+Các file quan trọng: .env (môi trường), database.php.
+Nếu dùng queue/job, cài và chạy php artisan queue:work hoặc cấu hình supervisor/Laragon.
